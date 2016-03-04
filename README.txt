@@ -15,10 +15,12 @@ Tested: OS X and Tux. Requires a compiler that supports C++11.
 
 Build: make
 
-Run: ./CSVGrader codelabs.csv problem_list.csv bblearn.csv -f
-Alternate Run: ./CSVGrader codelabs.csv problem_list.csv user_list.{csv, txt}
+clean: make clean 
+  - Removes CSVGrader and results.csv
 
-clear: Removes CSVGrader and results.csv
+To Run:
+  Run: ./CSVGrader codelabs.csv problem_list.csv bblearn.csv -f
+  Alternate Run: ./CSVGrader codelabs.csv problem_list.csv user_list.{csv, txt}
 
 Providing a user_list file instead of the bblearn file will simply search for those users in the codelabs.csv and report the results. 
 
