@@ -29,10 +29,11 @@ The results are written to a csv file "results.csv" after the searching is compl
 ##Creating a problem list
 Put the first problem in the first cell of the first row, put subsequent problems in the rows below the first. Don't put anything outside of the first column. Should work for .csv or .txt files, only .csv was tested. 
 
-********************************************************************************
+*********************************************************************
+
 Please note: these instructions have been taken from Amndeep Singh Mann: https://github.com/Amndeep7/DrexelCSDepartmentTuringscraftAnalysisTool
 
-##How to get BBLearn roster
+How to get BBLearn roster
 Go to the class page
 Go to the Grade Center
 Hover over the "Work Offline" menu and click "Download"
@@ -43,7 +44,7 @@ Click "Download"
 Save the file where you want it
 How to get Turingscraft roster
 
-##Go to the course page
+Go to the course page
 Click on "Status"
 Hover over the menu button in the new window that appears and click "Mail Roster"
 Fill out the form as desired
