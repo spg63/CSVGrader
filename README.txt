@@ -36,7 +36,7 @@ run against a user list, and an additional 1-2 seconds if it has to search for u
 returned for all users in the bblearn file. No tabulating of data is returned, however the results.csv file is quite easy to
 read.
 
-##Creating a problem list
+Creating a problem list
 Put the first problem in the first cell of the first row, put subsequent problems in the rows below the first. Don't put
 anything outside of the first column. Should work for .csv or .txt files, only .csv was tested. 
 
