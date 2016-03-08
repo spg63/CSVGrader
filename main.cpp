@@ -145,6 +145,16 @@ std::vector<std::string> find_users_from_bblearn_file(std::string codelabs_fp,
         bblearn_fnames.push_back(StrUtils::trim(bblearn_mat[i][bblearn_fname_col]));
     }
     
+    for(auto i = 0; i < bblearn_lnames.size(); ++i){
+        StrUtils::toLower(bblearn_lnames[i]);
+        StrUtils::toLower(bblearn_fnames[i]);
+    }
+    
+    for(int i = codelab_first_useful_row; i < codelabs_mat.size(); ++i){
+        StrUtils::toLower(codelabs_mat[i][codelab_lname_col]);
+        StrUtils::toLower(codelabs_mat[i][codelab_fname_col]);
+    }
+    
     // Now search the codelabs csv file for the names and get the emails
     for(auto i = 0; i < bblearn_lnames.size(); ++i){
         for(auto j = codelab_first_useful_row; j < codelabs_mat.size(); ++j){
