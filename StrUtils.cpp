@@ -6,6 +6,7 @@
 //  Copyright © 2015 Sean Grimes. All rights reserved.
 //
 
+#include <thread>
 #include "StrUtils.hpp"
 
 void StrUtils::toUpper(std::string &s){
@@ -36,6 +37,7 @@ std::string StrUtils::trim(const std::string &s){
     // Removing vertical tab
     trimmed.erase(remove(trimmed.begin(), trimmed.end(), '\v'), trimmed.end());
     
+    
     ///*************************************************************************
     // Addition for CSVGrader Program
     trimmed.erase(remove(trimmed.begin(), trimmed.end(), '\"'), trimmed.end());
@@ -58,6 +60,62 @@ std::vector<std::string> StrUtils::trimStringVector(const std::vector<std::strin
     }
     return r_vec;
 }
+
+std::vector<std::string> StrUtils::trimStrVec(
+        const std::vector<std::string> &v) {
+    auto num_threads = std::thread::hardware_concurrency();
+    auto num_strs = v.size();
+    auto num_strs_per_thread = num_strs / num_threads;
+
+    // If there aren't at least 2 string per split, run single thread version
+    if(num_strs_per_thread < 25)
+        return trimStringVector(v);
+
+    // Create num_threads amount of vectors
+    std::vector<std::vector<std::string>> thread_vecs;
+    for(auto i = 0; i < num_threads; ++i) {
+        std::vector<std::string> vec;
+        thread_vecs.push_back(vec);
+    }
+
+    // Add the strings to their respective vectors
+    auto num_loops = num_strs_per_thread * num_threads;
+    int vec_num = 0;
+    for(auto i = 0; i < num_loops; ++i){
+        thread_vecs[vec_num].push_back(v[i]);
+        if(i % num_strs_per_thread == 0 && i != 0)
+            ++vec_num;
+    }
+
+    // Add the remaining strings
+    for(auto i = num_loops; i < num_strs; ++i){
+        thread_vecs[vec_num].push_back(v[i]);
+    }
+
+    // Launch the threads
+    std::vector<std::future<std::vector<std::string>>> futures;
+    for(auto i = 0; i < num_threads; ++i){
+        futures.push_back(std::async(std::launch::async, &StrUtils::trimStringVector,
+                                     thread_vecs[i]));
+    }
+
+    // Get the results
+    std::vector<std::vector<std::string>> results;
+    for(auto i = 0; i < num_threads; ++i){
+        results.push_back(futures[i].get());
+    }
+
+    // Put the results into a single vector
+    std::vector<std::string> all_trimmed;
+    for(auto &&vec : results){
+        for(auto &&str : vec){
+            all_trimmed.push_back(str);
+        }
+    }
+
+    return all_trimmed;
+}
+
 
 std::vector<std::string> StrUtils::parseOnCharDelim(const std::string &line, const char delim){
     std::vector<std::string> vec;

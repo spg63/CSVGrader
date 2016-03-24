@@ -14,6 +14,9 @@
 #include <algorithm>
 #include <vector>
 #include <fstream>
+#include <thread>
+#include <future>
+#include <iostream>
 
 class StrUtils{
 public:
@@ -85,18 +88,23 @@ public:
      * @return: std::string - Returns a trimmed/stripped string
      */
     static std::string trim(const std::string &s);
-   
-    /**
-     * Trims each line of a vector<string> using the above trim function and
-     *  returns a new vector of trimmed items
-     *
-     * It would be more efficient to use trim and a loop or iterator, but
-     * sometimes a new vector of strings is preferable
-     *
-     * @param: v - The vector of strings to be trimmed
-     * @return: std::vector<std::string> - The vector of trimmed strings
-     */
-    static std::vector<std::string> trimStringVector(const std::vector<std::string> &v);
+
+   /**
+    * Depending on the length of your strings, the number of strings in the vector, and your
+    * system, this may provide a significant speedup over calling the trim() function
+    * individually on each string.
+    *
+    * The runtime for trim() can basically boil down to O(n*m) where n is the number of strings
+    * and m is the length of your strings. Running trim() in parallel can give a significant
+    * execution time advantage.
+    *
+    * NOTE: If vector isn't sufficiently large (testing shows 25 strings per thread min) this
+    * will default to single thread operations; otherwise the vector will be split and
+    * operated on concurrently. Splitting the vector is a sub-optimal solution, however
+    * it's quick to implement.
+    *  - Better ways to accomplish this are very welcome.
+    */
+    static std::vector<std::string> trimStrVec(const std::vector<std::string> &v);
     
     /**
      * Converts an int, double, or float to a string, returns the string
@@ -115,7 +123,20 @@ public:
     }
     
     static std::vector<std::string> parseOnCharDelim(const std::string &line, const char delim);
-    
+
+private:
+ /**
+  * Trims each line of a vector<string> using the above trim function and
+  *  returns a new vector of trimmed items
+  *
+  * It would be more efficient to use trim and a loop or iterator, but
+  * sometimes a new vector of strings is preferable
+  *
+  * @param: v - The vector of strings to be trimmed
+  * @return: std::vector<std::string> - The vector of trimmed strings
+  */
+    static std::vector<std::string> trimStringVector(const std::vector<std::string> &v);
+
 };
 
 #endif /* StrUtils_hpp */
